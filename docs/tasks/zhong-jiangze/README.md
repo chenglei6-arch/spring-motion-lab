@@ -20,8 +20,8 @@ git branch --show-current
 
 | 顺序 | 完整路径 | 修改位置 |
 |---|---|---|
-| 1 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SemiImplicitEulerIntegrator.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SemiImplicitEulerIntegrator.java) | `step(parameters, current, stepSeconds)` |
-| 2 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/RestDetector.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/RestDetector.java) | 连续计数、`observe(sample)`、`isSettled()` |
+| 1 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SemiImplicitEulerIntegrator.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SemiImplicitEulerIntegrator.java) | `step(parameters, current, stepSeconds)` |
+| 2 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/RestDetector.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/RestDetector.java) | 连续计数、`observe(sample)`、`isSettled()` |
 
 ## 1. 实现单步运动
 
@@ -40,11 +40,11 @@ git branch --show-current
 
 1. 在 `RestDetector` 加一个实例字段，记录连续满足条件的步数，初值为 0。
 2. `observe(sample)` 每次只看当前采样。位移绝对值严格小于 `0.002 m`，且速度绝对值严格小于 `0.005 m/s` 时计数加 1。任一项达到或超过阈值时计数归零。代码直接使用文件里已有的阈值常量。
-3. `isSettled()` 在计数达到 `REQUIRED_STEPS`（48 步）后返回 `true`。复位由控制器创建新的模拟器，静止检测器也随之重新初始化。
+3. `isSettled()` 在计数达到 `REQUIRED_STEPS` 后返回 `true`。这个常量由持续时长和每秒步数换算，当前算出 48 步。复位由控制器创建新的模拟器，静止检测器也随之重新初始化。
 
-可以用 `x = 0`、`v = 0.1` 代表经过平衡点，用 `x = 0.1`、`v = 0` 代表经过转折点，两种情况都应清零。连续喂 47 次 `x = 0.001`、`v = 0.003` 时应返回 `false`，第 48 次才返回 `true`。
+可以用 `x = 0`、`v = 0.1` 代表经过平衡点，用 `x = 0.1`、`v = 0` 代表经过转折点，两种情况都应清零。连续喂 `REQUIRED_STEPS - 1` 次 `x = 0.001`、`v = 0.003` 时应返回 `false`，再喂一次才返回 `true`。
 
-已有的 [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SpringSimulator.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SpringSimulator.java) 负责按固定时间步调用积分器和检测器。[`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/MotionSample.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/MotionSample.java) 定义了返回数据。[架构和公式](../../architecture.md) · [接口文档](../../api.md)
+已有的 [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SpringSimulator.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SpringSimulator.java) 负责按固定时间步调用积分器和检测器。[`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/model/MotionSample.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/model/MotionSample.java) 定义了返回数据。[架构和公式](../../architecture.md) · [接口文档](../../api.md)
 
 ## 怎么验收
 
