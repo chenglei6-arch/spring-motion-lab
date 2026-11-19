@@ -1,4 +1,7 @@
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.engine;
+
+import io.github.chenglei6arch.springmotionlab.simulation.model.MotionSample;
+import io.github.chenglei6arch.springmotionlab.simulation.model.SpringParameters;
 
 import java.util.Objects;
 
@@ -8,8 +11,11 @@ import java.util.Objects;
  * 再交给静止检测器检查。控制器在复位时创建新的仿真器。
  */
 public final class SpringSimulator {
+    /** 每模拟一秒执行的计算次数。 */
+    static final int STEPS_PER_SECOND = 120;
+
     /** 每次调用积分器时推进的固定模拟时长，单位为秒。 */
-    public static final double STEP_SECONDS = 1.0 / 120.0;
+    public static final double STEP_SECONDS = 1.0 / STEPS_PER_SECOND;
 
     private final SpringParameters parameters;
     private final MotionIntegrator integrator;

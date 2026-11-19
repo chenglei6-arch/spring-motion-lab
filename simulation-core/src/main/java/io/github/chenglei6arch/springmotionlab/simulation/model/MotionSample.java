@@ -1,4 +1,4 @@
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.model;
 
 /**
  * 运动采样记录。
