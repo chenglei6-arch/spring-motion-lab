@@ -1,7 +1,8 @@
 /*
  * 负责人：程磊
- * TODO 1：增加参数输入和开始、暂停、复位按钮。按接口文档应用参数并显示校验错误。
- * TODO 2：用 withFrameNanos 与时间累加器驱动 Java tick()，按固定模拟步长补齐时间。
+ * TODO 1：用 SpringParameters.defaults() 初始化输入框，增加开始、暂停和复位按钮。
+ *         按接口文档应用参数并显示校验错误。
+ * TODO 2：用 withFrameNanos 与时间累加器驱动 Java tick()，按 controller.stepSeconds() 给出的固定步长补齐时间。
  *         暂停或复位时清除累加器，限制单帧补步并在 SETTLED 时结束循环。
  * TODO 3：用最新快照更新状态与弹簧视图，按模拟时间采样并更新位移曲线。
  */
@@ -20,8 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.chenglei6arch.springmotionlab.simulation.SimulationController
-import io.github.chenglei6arch.springmotionlab.simulation.SpringParameters
+import io.github.chenglei6arch.springmotionlab.simulation.control.SimulationController
+import io.github.chenglei6arch.springmotionlab.simulation.model.SpringParameters
 
 @Composable
 fun SpringLabScreen() {

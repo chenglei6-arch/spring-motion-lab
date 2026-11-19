@@ -6,7 +6,10 @@
  * TODO 3 把新时间、位移和速度装入新的运动采样并返回。
  * 使用默认参数推进 1/120 秒，第一步速度约为 -0.02666667 米每秒，位移约为 0.19977778 米。
  */
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.engine;
+
+import io.github.chenglei6arch.springmotionlab.simulation.model.MotionSample;
+import io.github.chenglei6arch.springmotionlab.simulation.model.SpringParameters;
 
 /**
  * 半隐式欧拉积分器。
