@@ -30,9 +30,9 @@ git branch --show-current
 
 ## 2. 接参数和运行控制
 
-1. 在 `SpringLabScreen()` 放弹力系数、初始位移、摩擦系数的输入框，初值为 `16.0 N/m`、`0.20 m`、`2.0 N·s/m`。读取文本后构造 `SpringParameters`，把解析或范围错误显示在界面。校验通过再调用控制器。
+1. 在 `SpringLabScreen()` 放弹力系数、初始位移、摩擦系数的输入框，从 `SpringParameters.defaults()` 读取初始值，并用 `SpringParameters` 的范围常量显示有效范围。读取文本后构造 `SpringParameters`，把解析或范围错误显示在界面。校验通过再调用控制器。
 2. 第一次开始先调用 `reset(parameters)` 应用参数，再调用 `start()`。继续直接调用 `start()`。暂停调用 `pause()`，复位调用 `reset(parameters)`。在 `RUNNING` 和 `PAUSED` 禁用参数编辑，静止后可以编辑并复位。
-3. 只在 `RUNNING` 时用 `withFrameNanos` 累加帧间隔。每积满 `SpringSimulator.STEP_SECONDS` 调用一次 `tick()`，取返回的快照刷新界面。限制单帧补步，暂停、复位或静止后结束循环，继续时重新以当前帧时间为基准。
+3. 只在 `RUNNING` 时用 `withFrameNanos` 累加帧间隔。每积满 `controller.stepSeconds()` 返回的步长 调用一次 `tick()`，取返回的快照刷新界面。限制单帧补步，暂停、复位或静止后结束循环，继续时重新以当前帧时间为基准。
 4. 传 `snapshot.sample()` 给 `SpringCanvas()`。从同一快照取状态和模拟时间显示。确认暂停期间界面时间不变，继续从暂停点推进，复位回到所选初始位移。
 
 窗口入口在 [`desktopApp/src/main/kotlin/io/github/chenglei6arch/springmotionlab/desktop/Main.kt`](../../../desktopApp/src/main/kotlin/io/github/chenglei6arch/springmotionlab/desktop/Main.kt)，Java 的方法和状态说明见 [接口文档](../../api.md)。
