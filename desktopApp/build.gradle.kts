@@ -6,22 +6,24 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 dependencies {
-    implementation(project(":shared"))
-
+    implementation(project(":simulation-core"))
     implementation(compose.desktop.currentOs)
+    implementation(libs.compose.material3)
     implementation(libs.kotlinx.coroutinesSwing)
-
-    implementation(libs.compose.uiToolingPreview)
 }
 
 compose.desktop {
     application {
-        mainClass = "org.mywebsite.spring_motion_lab.MainKt"
+        mainClass = "io.github.chenglei6arch.springmotionlab.desktop.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.mywebsite.spring_motion_lab"
+            packageName = "spring-motion-lab"
             packageVersion = "1.0.0"
         }
     }
