@@ -5,7 +5,12 @@
  * TODO 3 运行中才推进一步，达到静止条件后切换状态，最后返回快照。
  * 验收时检查暂停和静止期间的采样保持一致，以及复位能应用新的初始位移。
  */
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.control;
+
+import io.github.chenglei6arch.springmotionlab.simulation.engine.MotionIntegrator;
+import io.github.chenglei6arch.springmotionlab.simulation.engine.SemiImplicitEulerIntegrator;
+import io.github.chenglei6arch.springmotionlab.simulation.engine.SpringSimulator;
+import io.github.chenglei6arch.springmotionlab.simulation.model.SpringParameters;
 
 import java.util.Objects;
 
@@ -37,6 +42,15 @@ public final class SimulationController {
     public SimulationController(SpringParameters parameters, MotionIntegrator integrator) {
         this.integrator = Objects.requireNonNull(integrator);
         simulator = new SpringSimulator(parameters, this.integrator);
+    }
+
+    /**
+     * 查询每次推进所使用的固定时长，供界面安排推进次数。
+     *
+     * @return 每个模拟时间步的时长，单位为秒
+     */
+    public double stepSeconds() {
+        return SpringSimulator.STEP_SECONDS;
     }
 
     /**

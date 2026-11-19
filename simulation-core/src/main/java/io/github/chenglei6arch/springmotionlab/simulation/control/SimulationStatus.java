@@ -1,4 +1,4 @@
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.control;
 
 /**
  * 仿真运行状态枚举。
