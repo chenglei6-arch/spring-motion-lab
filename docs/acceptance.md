@@ -2,7 +2,7 @@
 
 负责人为阿卜杜热合曼。
 
-- TODO 1：实现 `SimulationAcceptanceTest` 顶部列出的计算、检测和控制用例。记录测试命令和结果。
+- TODO 1：实现 `engine/SpringPhysicsTest.java` 顶部的计算、静止检测用例，以及 `control/SimulationAcceptanceTest.java` 顶部的参数校验和控制用例。记录测试命令和结果。
 - TODO 2：功能合入后，用下列参数做对照实验，记录实际运行结果并补上截图。
 - TODO 3：在答辩用系统和架构上构建 JAR，在另一台同平台机器用 JDK 21 启动。登记运行环境、产物文件名和验收结果。
 

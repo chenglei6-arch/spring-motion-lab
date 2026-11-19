@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.github.chenglei6arch.springmotionlab.simulation.MotionSample
+import io.github.chenglei6arch.springmotionlab.simulation.model.MotionSample
 
 @Composable
 fun DisplacementChart(samples: List<MotionSample>, modifier: Modifier = Modifier) {

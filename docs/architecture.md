@@ -13,7 +13,15 @@
 | `desktopApp/src/main/kotlin` | Kotlin/JVM、Compose Desktop | 输入和提示、绘制弹簧、帧计时与曲线 |
 | `docs` | Markdown | 设计、接口、开发和验收 |
 
-依赖方向是 `desktopApp → simulation-core`。Java 核心可以在无界面的环境里测试。两种语言在同一个 JVM 进程内交互。
+Java 的基础包名为 `io.github.chenglei6arch.springmotionlab.simulation`，源码按职责放在三个子包。
+
+| 子包 | 主要类型 | 职责 |
+|---|---|---|
+| `model` | `SpringParameters`、`MotionSample` | 保存本轮参数和各时刻的运动数据 |
+| `engine` | `MotionIntegrator`、`SemiImplicitEulerIntegrator`、`SpringSimulator`、`RestDetector` | 负责单步积分、查验静止和保存当前运动采样 |
+| `control` | `SimulationController`、`SimulationStatus`、`SimulationSnapshot` | 处理开始、暂停、继续、复位并向界面提供快照 |
+
+桌面界面依赖 `control` 与 `model`。`control` 调用 `engine`，两者从 `model` 读取数据。Java 核心可以在无界面的环境中测试，测试包与被测代码对应。
 
 ## Java 类型关系
 
@@ -69,9 +77,18 @@ classDiagram
 a     = (-k * x - c * v) / m
 vNext = v + a * dt
 xNext = x + vNext * dt
-dt    = 1 / 120 秒
+dt    = 1 / 每秒仿真步数
 ```
 
 先更新速度再用新速度更新位移。Java 每次推进一个固定步长，Compose 只根据帧时间安排推进次数。用模拟时间绘制曲线，同一组参数可以复现实验。[弹簧与阻尼模型参考](https://www.myphysicslab.com/springs/single-spring-en.html)
 
-静止判定要求 `|x| < 0.002 m` 与 `|v| < 0.005 m/s` 同时满足 48 个连续计算步，约 0.4 秒。达到阈值后保留最后一次采样，后续不再推进。经过平衡点时速度可能较大，经过转折点时位移可能较大，两种情况都需要继续计算。
+## 参数与常量的归属
+
+| 值 | 源码位置 | 使用方式 |
+|---|---|---|
+| 弹力系数、初始位移、摩擦系数 | `model/SpringParameters.java` | 由用户输入，界面初值读取 `defaults()`。取值范围和默认值集中在这个类 |
+| 固定质量 | `model/SpringParameters.java` | 模型约定使用 1 kg，积分器读取 `MASS_KILOGRAMS` |
+| 仿真频率 | `engine/SpringSimulator.java` | 每秒 120 步，步长由频率计算，界面从 `controller.stepSeconds()` 读取 |
+| 静止判定 | `engine/RestDetector.java` | 位移绝对值小于 0.002 m，速度绝对值小于 0.005 m/s，两个条件持续至少 400 毫秒 |
+
+静止判定所需步数按持续时长与每秒步数换算并向上取整，当前设置算出 48 步。修改频率时会自动重新换算。经过平衡点时速度可能较大，经过转折点时位移可能较大，两种情况都要继续计算。达到静止条件后保留最后一次采样。

@@ -1,4 +1,7 @@
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.engine;
+
+import io.github.chenglei6arch.springmotionlab.simulation.model.MotionSample;
+import io.github.chenglei6arch.springmotionlab.simulation.model.SpringParameters;
 
 /**
  * 运动积分器接口。

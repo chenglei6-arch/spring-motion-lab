@@ -4,7 +4,7 @@
  * TODO 2 若参数非法，抛出 IllegalArgumentException，消息包含参数名称和允许范围。
  * 验收时检查两个端点可以使用，非数、无穷大和越界值会报错。
  */
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.model;
 
 /**
  * 弹簧参数记录。
@@ -26,14 +26,21 @@ public record SpringParameters(
     public static final double MIN_STIFFNESS = 4.0;
     /** 弹力系数的上限，单位为牛顿每米。 */
     public static final double MAX_STIFFNESS = 100.0;
-    /** 初始位移的下限，单位为米。 */
-    public static final double MIN_INITIAL_DISPLACEMENT = -0.30;
     /** 初始位移的上限，单位为米。 */
     public static final double MAX_INITIAL_DISPLACEMENT = 0.30;
+    /** 初始位移的下限，与上限关于平衡位置对称，单位为米。 */
+    public static final double MIN_INITIAL_DISPLACEMENT = -MAX_INITIAL_DISPLACEMENT;
     /** 摩擦系数的下限，单位为牛顿秒每米。 */
     public static final double MIN_DAMPING = 0.5;
     /** 摩擦系数的上限，单位为牛顿秒每米。 */
     public static final double MAX_DAMPING = 12.0;
+
+    /** 默认演示的弹力系数，单位为牛顿每米。 */
+    private static final double DEFAULT_STIFFNESS = 16.0;
+    /** 默认演示的初始位移，单位为米。 */
+    private static final double DEFAULT_INITIAL_DISPLACEMENT = 0.20;
+    /** 默认演示的摩擦系数，单位为牛顿秒每米。 */
+    private static final double DEFAULT_DAMPING = 2.0;
 
     /**
      * 创建用于界面初次打开和默认演示的参数。
@@ -41,7 +48,7 @@ public record SpringParameters(
      * @return 弹力系数为 16.0、初始位移为 0.20、摩擦系数为 2.0 的参数记录
      */
     public static SpringParameters defaults() {
-        return new SpringParameters(16.0, 0.20, 2.0);
+        return new SpringParameters(DEFAULT_STIFFNESS, DEFAULT_INITIAL_DISPLACEMENT, DEFAULT_DAMPING);
     }
 
     /**

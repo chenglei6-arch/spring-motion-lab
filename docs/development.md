@@ -13,7 +13,7 @@
 
 | 对象 | 约定 | 示例 |
 |---|---|---|
-| Java 和 Kotlin 包 | 全小写，无下划线 | `io.github.chenglei6arch.springmotionlab.simulation` |
+| Java 和 Kotlin 包 | 全小写，无下划线 | `io.github.chenglei6arch.springmotionlab.simulation.model` |
 | Java 类、接口、record、枚举 | PascalCase，顶级类型与文件名一致 | `MotionIntegrator.java` |
 | Kotlin 文件、类和 Compose 组件 | PascalCase 和职责匹配 | `SpringCanvas.kt`、`SpringCanvas()` |
 | 方法、变量 | lowerCamelCase | `initialDisplacementMeters`、`isSettled()` |
@@ -33,4 +33,4 @@
 .\gradlew.bat :desktopApp:packageUberJarForCurrentOS
 ```
 
-测试报告在 `simulation-core/build/reports/tests/test/index.html`。工程骨架自带一个初始状态测试。功能用例按个人 README 增加，关联 TODO 完成后再做完整验收。组内交付步骤见[验收文档](acceptance.md)。
+测试报告在 `simulation-core/build/reports/tests/test/index.html`。工程骨架自带初始状态和静止时长换算测试。功能用例按个人 README 增加，关联 TODO 完成后再做完整验收。组内交付步骤见[验收文档](acceptance.md)。
