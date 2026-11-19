@@ -20,8 +20,8 @@ git branch --show-current
 
 | 顺序 | 完整路径 | 修改位置 |
 |---|---|---|
-| 1 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SpringParameters.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SpringParameters.java) | record 的紧凑构造器 `public SpringParameters { ... }` |
-| 2 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationController.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationController.java) | `start()`、`pause()`、`reset()`、`tick()` |
+| 1 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/model/SpringParameters.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/model/SpringParameters.java) | record 的紧凑构造器 `public SpringParameters { ... }` |
+| 2 | [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationController.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationController.java) | `start()`、`pause()`、`reset()`、`tick()` |
 
 ## 1. 校验三个参数
 
@@ -42,7 +42,7 @@ git branch --show-current
 | `reset(parameters)` | 用新参数和现有 `integrator` 创建 `SpringSimulator` 并替换旧实例，再回到 `READY`。新快照的时间和速度为 0，位移为新参数中的初始位移 |
 | `tick()` | `RUNNING` 时调用一次 `simulator.advance()`，随后检查 `simulator.isSettled()`，达标就切到 `SETTLED`。所有状态都返回当前快照，只有 `RUNNING` 推进时间 |
 
-其他状态下调用 `start()` 或 `pause()` 时保持当前状态。状态常量在 [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationStatus.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationStatus.java)，各方法的约定见 [Java 接口](../../api.md)。
+其他状态下调用 `start()` 或 `pause()` 时保持当前状态。状态常量在 [`simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationStatus.java`](../../../simulation-core/src/main/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationStatus.java)，各方法的约定见 [Java 接口](../../api.md)。
 
 ## 3. 自己跑一次状态切换
 
