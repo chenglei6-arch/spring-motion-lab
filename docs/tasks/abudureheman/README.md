@@ -1,6 +1,6 @@
 # 阿卜杜热合曼的开发任务
 
-你负责把验收标准写成 Java 测试，再实际运行两组弹簧参数与打包产物。测试类和验收记录都已建好，可以先写测试，等对应功能合入后再核对结果。
+你负责把验收标准写成 Java 测试，再实际运行两组弹簧参数与打包产物。两个测试类和验收记录都已建好，可以先写测试，等对应功能合入后再核对结果。
 
 ## 开工
 
@@ -20,18 +20,19 @@ git branch --show-current
 
 | 顺序 | 完整路径 | 修改位置 |
 |---|---|---|
-| 1 | [`simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationAcceptanceTest.java`](../../../simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/SimulationAcceptanceTest.java) | 在现有 JUnit 类里添加 `@Test` 方法 |
-| 2 | [`docs/acceptance.md`](../../../docs/acceptance.md) | 填写功能验收、阻尼对照和打包验证结果 |
+| 1 | [`simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SpringPhysicsTest.java`](../../../simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/engine/SpringPhysicsTest.java) | 增加单步积分和静止检测用例 |
+| 2 | [`simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationAcceptanceTest.java`](../../../simulation-core/src/test/java/io/github/chenglei6arch/springmotionlab/simulation/control/SimulationAcceptanceTest.java) | 增加参数校验和运行控制用例 |
+| 3 | [`docs/acceptance.md`](../../../docs/acceptance.md) | 填写功能验收、阻尼对照和打包验证结果 |
 
 ## 1. 写 Java 自动化测试
 
-直接在 `SimulationAcceptanceTest.java` 的类中增加测试方法。现有测试可以作为写法示例。对小数用 `assertEquals(预期值, 实际值, 容差)`，例如数值计算可取 `1e-7`。测试在和仿真代码相同的包内，可以直接新建 `RestDetector` 并喂入样本。
+运动和静止用例放在 `engine/SpringPhysicsTest.java`，同包中可以直接创建 `RestDetector`。参数和控制用例放在 `control/SimulationAcceptanceTest.java`。两个文件都有已有测试可作示例。对小数用 `assertEquals(预期值, 实际值, 容差)`，例如数值计算可取 `1e-7`。
 
 | 要验证的情况 | 测试里怎么构造 | 期望结果 |
 |---|---|---|
-| 前两步运动 | 默认参数，初始位移 0.20 m、初速度 0，连续调用两次 `step()`，每步 `1/120 s` | 第一步位移约 0.19977778 m、速度约 -0.02666667 m/s。第二步位移约 0.19933728 m、速度约 -0.05285926 m/s |
-| 经过平衡点、经过转折点 | 分别传入 `x = 0, v = 0.1` 与 `x = 0.1, v = 0` | 两种都应打断连续计数。可以在第 47 个达标样本后插入这些点，再检查计数重新开始 |
-| 连续进入静止范围 | 连续传入 `x = 0.001, v = 0.003` | 第 47 次后为 `false`，第 48 次后为 `true` |
+| 前两步运动 | 默认参数，初始位移 0.20 m、初速度 0，连续调用两次 `step()`，步长读取 `SpringSimulator.STEP_SECONDS` | 第一步位移约 0.19977778 m、速度约 -0.02666667 m/s。第二步位移约 0.19933728 m、速度约 -0.05285926 m/s |
+| 经过平衡点、经过转折点 | 分别传入 `x = 0, v = 0.1` 与 `x = 0.1, v = 0` | 两种都应打断连续计数。可以在第 `REQUIRED_STEPS - 1` 个达标样本后插入这些点，再检查计数重新开始 |
+| 连续进入静止范围 | 连续传入 `x = 0.001, v = 0.003` | 第 `REQUIRED_STEPS - 1` 次后为 `false`，再送入一个达标样本后为 `true` |
 | 参数错误 | 分别传超范围值、`NaN` 和无穷大 | 构造参数时抛出 `IllegalArgumentException` |
 | 暂停、继续、复位 | 开始后执行一步，暂停后再执行 `tick()`，继续后再执行一步，用新初始位移复位 | 暂停时快照不变，继续后时间增加，复位回到 `READY`、时间 0、速度 0 和新初始位移 |
 | 静止后调用 `tick()` | 用静止样本持续推进到 `SETTLED`，再调用一次 | 状态和最后一个采样保持一致 |
