@@ -1,4 +1,6 @@
-package io.github.chenglei6arch.springmotionlab.simulation;
+package io.github.chenglei6arch.springmotionlab.simulation.control;
+
+import io.github.chenglei6arch.springmotionlab.simulation.model.MotionSample;
 
 /**
  * 仿真快照记录。
